@@ -23,6 +23,7 @@ namespace EventCatalogAPI.Domain
     public int LocationId { get; set; }
      public string TicketType { get; set; } //free/paid/subscription/trial
      public int AvailableSeats { get; set; }
+            public string State { get; set; }
 
         public virtual EventType EventType { get; set; }
     public virtual EventLocation EventLocation { get; set; }
