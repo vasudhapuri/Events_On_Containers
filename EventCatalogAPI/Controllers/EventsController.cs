@@ -24,6 +24,8 @@ namespace EventCatalogAPI.Controllers
             this._config = config;
         }
 
+
+
         [HttpGet("[action]")]
         public async Task<IActionResult> GetByType(
             [FromQuery] int typeId = 0)
@@ -45,6 +47,14 @@ namespace EventCatalogAPI.Controllers
            [FromQuery] int likes = 0)
         {
             var items = await this._context.Events.Where(x => x.Likes == likes).ToListAsync();
+            return Ok(items);
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetByZipCode(
+           [FromQuery] string zipcode = "0")
+        {
+            var items = await this._context.Events.Where(x => x.Zip == zipcode).ToListAsync();
             return Ok(items);
         }
 
