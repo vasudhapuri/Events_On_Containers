@@ -47,6 +47,23 @@ namespace EventCatalogAPI.Controllers
             return Ok(model);
         }
 
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetByType(
+            [FromQuery] int typeId = 0)
+        {
+            var items = await this._context.Events.Where(x => x.TypeId == typeId).ToListAsync();
+            return Ok(items);
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetByLocation(
+        [FromQuery] int locationId = 0)
+        {
+            var items = await this._context.Events.Where(x => x.LocationId == locationId).ToListAsync();
+            return Ok(items);
+        }
+
+
         private List<EachEvent> ChangePictureUrl(List<EachEvent> items)
         {
             items.ForEach(item=>
@@ -55,5 +72,14 @@ namespace EventCatalogAPI.Controllers
                 "http://externalcatalogbaseurltobereplaced", _config["ExternalCatalogUrl"]));
             return items;
         }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetByZipCode(
+           [FromQuery] string zipcode = "0")
+        {
+            var items = await this._context.Events.Where(x => x.Zip == zipcode).ToListAsync();
+            return Ok(items);
+        }
+
     }
 }
