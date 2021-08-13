@@ -28,6 +28,25 @@ services:
     depends_on:
       - mssqlserver
 
+  webmvc:
+    image: events1/webmvc
+    build:
+      context: .\WebMVC
+      dockerfile: Dockerfile
+    environment: 
+      ASPNETCORE_ENVIRONMENT: Development
+      CatalogUrl: http://catalog
+    ports:
+      - "7600:80"
+    container_name: webshop1
+    networks:
+      - frontend
+    depends_on: 
+      - catalog
+
+
+
+
 
 
   mssqlserver:

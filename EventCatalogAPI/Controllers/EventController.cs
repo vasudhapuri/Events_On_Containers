@@ -47,6 +47,41 @@ namespace EventCatalogAPI.Controllers
             return Ok(model);
         }
 
+        [HttpGet("[action]/type/{TypeId}/location/{LocationId}")]
+        public async Task<IActionResult> Items(
+           int? typeId, int? locationId,
+            [FromQuery] int pageIndex = 0, [FromQuery] int pageSize = 6 )
+          
+        {
+            var query = (IQueryable<EachEvent>)_context.Events;
+            if(typeId.HasValue)
+            {
+                query = query.Where(c=>c.TypeId == typeId);
+            }
+
+            if(locationId.HasValue)
+            {
+                query = query.Where(c => c.LocationId == locationId);
+            }
+            var itemsCount = query.LongCountAsync();
+            var items = await query
+                  //.OrderBy (c=>c.EventName)
+                  .Skip(pageIndex * pageSize)
+                  .Take(pageSize)
+                  .ToListAsync();
+
+            items = ChangePictureUrl(items);
+            var model = new PaginatedItemsViewModel
+            {
+                PageIndex = pageIndex,
+                PageSize = items.Count,
+                Count = itemsCount.Result,
+                Data = items
+            };
+
+            return Ok(model);
+        }
+
         [HttpGet("[action]")]
         public async Task<IActionResult> GetByType(
             [FromQuery] int typeId = 0)
@@ -61,6 +96,20 @@ namespace EventCatalogAPI.Controllers
         {
             var items = await this._context.Events.Where(x => x.LocationId == locationId).ToListAsync();
             return Ok(items);
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> EventTypes()
+        {
+           var types= await _context.EventTypes.ToListAsync();
+            return Ok(types);
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> EventLocations()
+        {
+            var locations = await _context.EventLocations.ToListAsync();
+            return Ok(locations);
         }
 
 
