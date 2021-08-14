@@ -9,13 +9,33 @@
     <div class="esh-catalog-name">
         <span>@Model.EventName</span>
     </div>
-    <div class="esh-catalog-price">
+   @*  <div class="esh-catalog-price">
         <span>@Model.Price.ToString("N2")</span>
+    </div> *@
+    @if (Model.Price == 0)
+    {
+        <span class="esh-catalog-price">FREE</span>
+    }
+
+    else
+    {
+        <span class="esh-catalog-price1">$@Model.Price.ToString("N2")</span>
+    }
+    
+    <div class="esh-catalog-date">
+        <span>@Model.Date</span>
     </div>
+    <div class="esh-catalog-location">
+        <span>@Model.EventLocation</span>
+    </div>
+    <div class="esh-catalog-likes">
+        <span >&hearts;  @Model.Likes</span>
+        </div>
+        
     <input type="hidden" asp-for="@Model.EventType" name="type" />
     <input type="hidden" asp-for="@Model.TypeId" name="typeId" />
-    <input type="hidden" asp-for="@Model.EventLocation" name="location" />
-    <input type="hidden" asp-for="@Model.LocationId" name="locationId" />
+    @*  <input type="hidden" asp-for="@Model.EventLocation" name="location" />*@
+    @*<input type="hidden" asp-for="@Model.LocationId" name="locationId" /> *@
     <input type="hidden" asp-for="@Model.Description" name="description" />
     <input type="hidden" asp-for="@Model.Id" name="id" />
     <input type="hidden" asp-for="@Model.EventName" name="eventname" />
