@@ -47,9 +47,10 @@ namespace EventCatalogAPI.Controllers
             return Ok(model);
         }
 
-        [HttpGet("[action]/type/{TypeId}/location/{LocationId}")]
+        //[HttpGet("[action]/type/{TypeId}/location/{LocationId}")]
+        [HttpGet("[action]/filtered")]
         public async Task<IActionResult> Items(
-           int? typeId, int? locationId,
+           [FromQuery] int? typeId, [FromQuery] int? locationId,
             [FromQuery] int pageIndex = 0, [FromQuery] int pageSize = 6 )
           
         {

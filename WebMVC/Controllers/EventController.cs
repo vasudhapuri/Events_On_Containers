@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace WebMVC.Controllers
             _service = service;
         }
 
-    
+
         public async Task<IActionResult> Index(int? page, int? typeFilterApplied, int? locationFilterApplied)
         {
             var itemsOnPage = 10;
@@ -40,5 +41,14 @@ namespace WebMVC.Controllers
 
             return View(vm);
         }
+        [Authorize]
+        public IActionResult About()
+        {
+            ViewData["Message"] = "Your application description page.";
+
+
+            return View();
+        }
     }
 }
+

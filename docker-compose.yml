@@ -36,6 +36,8 @@ services:
     environment: 
       ASPNETCORE_ENVIRONMENT: Development
       CatalogUrl: http://catalog
+      IdentityUrl: http://192.168.86.201:7900
+      CallBackUrl: http://localhost:7600
     ports:
       - "7600:80"
     container_name: webshop1
@@ -43,11 +45,29 @@ services:
       - frontend
     depends_on: 
       - catalog
+      - eventstokenserver
 
 
+  
+      
+  eventstokenserver:   
+    build:
+      context: .\TokenServiceApi
+      dockerfile: Dockerfile
+    image: events1/eventstokenapi
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      MvcClient: http://localhost:7600
+    ports:
+      - "7900:80"
+    container_name: eventstokenserviceapi
+    networks:
+      - backend
+      - frontend
+    depends_on:
+      - eventstokensqlserver
 
-
-
+      
 
   mssqlserver:
     image: "mcr.microsoft.com/mssql/server:latest"
@@ -57,6 +77,18 @@ services:
     ports:
       - "1452:1433"
     container_name: eventssqlserver
+    networks: 
+      - backend
+
+
+  eventstokensqlserver:
+    image: "mcr.microsoft.com/mssql/server:latest"
+    environment: 
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: ProductApi(!)
+    ports:
+      - "1453:1433"
+    container_name: eventsstokensqlserver
     networks: 
       - backend
 
