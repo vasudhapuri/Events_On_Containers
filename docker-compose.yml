@@ -17,8 +17,6 @@ services:
       DatabaseUser: sa
       DatabasePassword: ProductApi(!) 
       ExternalCatalogUrl: http://localhost:7004
-
-
     ports: 
       - "7004:80"
     container_name: eventscatalogapi1
@@ -28,6 +26,26 @@ services:
     depends_on:
       - mssqlserver
 
+  eventcart:
+    image: events/cartapi
+    build:
+      context: .\CartApi
+      dockerfile: Dockerfile
+    environment: 
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionString: eventsbasket.data
+      IdentityUrl: http://192.168.86.230:7900
+    ports: 
+      - "7012:80"
+    container_name: eventscartapi1
+    networks:
+      - frontend
+      - backend
+    depends_on:
+      - eventsbasket.data
+      - eventstokenserver
+
+
   webmvc:
     image: events1/webmvc
     build:
@@ -36,7 +54,7 @@ services:
     environment: 
       ASPNETCORE_ENVIRONMENT: Development
       CatalogUrl: http://catalog
-      IdentityUrl: http://192.168.86.201:7900
+      IdentityUrl: http://192.168.86.230:7900
       CallBackUrl: http://localhost:7600
     ports:
       - "7600:80"
@@ -91,4 +109,13 @@ services:
     container_name: eventsstokensqlserver
     networks: 
       - backend
+
+    
+  eventsbasket.data:
+      image: redis
+      ports: 
+        - "7052:6379"
+      container_name: eventsbasketdata
+      networks:
+         - backend
 

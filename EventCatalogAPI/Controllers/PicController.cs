@@ -20,6 +20,7 @@ namespace EventCatalogAPI.Controllers
         }
 
         [Route("{id}")]
+        [HttpGet]
         public IActionResult GetImage(int id)
         {
             var webroot = _env.WebRootPath;
